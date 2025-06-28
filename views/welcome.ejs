@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ChatApp</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2f, #34346c);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .spinner {
+            font-size: 48px;
+            animation: spin 5s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h4 {
+            font-weight: normal;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            color: #dcdcdc;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #ff4d6d;
+            color: white;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff1f4c;
+            transform: scale(1.1);
+        }
+
+        .signup-text {
+            font-size: 0.95rem;
+            color: #bbb;
+        }
+
+        .signup-text a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-text a:hover {
+            text-decoration: underline;
+        }
+        .tagline {
+    font-style: italic;
+    font-size: 1.3rem;
+    color: #e0e0e0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+    margin-bottom: 1.8rem;
+}
+    </style>
+</head>
+<body>
+    <div class="spinner">💬</div>
+    <h2>Welcome to ChatApp</h2>
+    <h4 class="tagline">Talk to strangers... until they're not 😉</h4>
+    <div class="btn-group">
+        <button onclick="location.href='/welcome/login'">Login</button>
+        <button onclick="location.href='/welcome/signup'">Signup</button>
+    </div>
+    <div class="signup-text">
+        New to this place? <a href="/signup">Sign up now</a> and start vibing ✨
+    </div>
+</body>
+</html>

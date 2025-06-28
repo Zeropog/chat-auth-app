@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #1e1e2f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 1rem;
+      text-align: center;
+      background-color: #29293d;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .sidebar {
+      width: 250px;
+      background-color: #2b2b3d;
+      padding: 1rem;
+      overflow-y: auto;
+      border-right: 2px solid #3a3a5a;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar li {
+      padding: 10px;
+      margin-bottom: 8px;
+      background-color: #3a3a5a;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar li:hover {
+      background-color: #50507a;
+    }
+
+    .main-panel {
+      flex-grow: 1;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-box {
+      flex: 1;
+      background-color: #33334d;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow-y: auto;
+    }
+
+    #chat-area {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 1rem;
+    }
+
+    #messageInput {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    #sendBtn {
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4dff88;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .action-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4d88ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .action-buttons button:hover {
+      background-color: #1f75ff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+      <% if (typeof username !== 'undefined') { %>
+         👋 Welcome, <%= username %>
+      <% } else { %>
+        👋 Welcome, User
+      <% } %>
+  </header>
+
+  <div class="container">
+    <div class="sidebar">
+      <h3>Friends</h3>
+      <ul>
+        <li>John Doe</li>
+        <li>Alicia</li>
+        <li>Bob</li>
+      </ul>
+    </div>
+
+    <div class="main-panel">
+      <div class="chat-box" id="messages">
+        <p><em>Select a friend or join a room to start chatting...</em></p>
+      </div>
+
+      <div id="chat-area">
+        <input type="text" id="messageInput" placeholder="Type your message..." />
+        <button id="sendBtn">Send</button>
+      </div>
+
+      <div class="action-buttons">
+        <button id="create-room-btn">+ Create Room</button>
+        <button id="join-room-btn">Join Room</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const username="<%=username%>";
+    socket.on("connect", () => {
+      console.log("✅ Connected to server:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("❌ Disconnected from server");
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+      const input = document.getElementById("messageInput");
+      const message = input.value.trim();
+      if (message) {
+        socket.emit("chat-message", {
+          username,
+          message,
+        });
+        input.value = "";
+      }
+    });
+
+    socket.on("chat-message", (data) => {
+      const messagesDiv = document.getElementById("messages");
+      const p = document.createElement("p");
+      p.innerHTML=`<strong> ${data.username}:</strong> ${data.message}`; 
+      messagesDiv.appendChild(p);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  </script>
+</body>
+</html>
