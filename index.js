@@ -28,7 +28,7 @@ app.use(express.urlencoded({extended: false}));
 
 app.use('/welcome', staticroutes);
 app.use('/auth', getauth);
-app.use('/dashboard', authbycookie, getdashboardroute);
+app.use('/dashboard', authbycookie,getdashboardroute);
 
 io.on('connection', function(socket) {
     console.log("New user is connected to the server", socket.id);

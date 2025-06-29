@@ -125,13 +125,18 @@
 
   <div class="container">
     <div class="sidebar">
-      <h3>Friends</h3>
-      <ul>
-        <li>John Doe</li>
-        <li>Alicia</li>
-        <li>Bob</li>
-      </ul>
-    </div>
+  <h3>Friends</h3>
+  <ul id="friend-list">
+    <% if (friends && friends.length > 0) { %>
+      <% friends.forEach(friend => { %>
+        <li data-friend="<%= friend %>"><%= friend %></li>
+      <% }); %>
+    <% } else { %>
+      <li>No friends added yet 😢</li>
+    <% } %>
+  </ul>
+</div>
+
 
     <div class="main-panel">
       <div class="chat-box" id="messages">
