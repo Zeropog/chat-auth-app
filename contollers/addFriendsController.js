@@ -4,7 +4,8 @@ class addFriendsController {
     static async addFriends(req, res){
         const {friendusername}= req.body;
         const myusername= req.user?.username;
-        if(!myusername || !friendusername) return res.status(400).send('Invalid friend request');
+        if(!myusername) return res.status(404).send('Bad request');
+        if(!friendusername) return res.status(400).send('Please provide us the friend name');
         try {
             const friend= await userschema.findOne({username: friendusername});
             if(!friend) return res.status(400).send("user not found");
@@ -12,7 +13,7 @@ class addFriendsController {
             //  Add friend to both users (if not already present) 
              await userschema.updateOne(
                 {username: myusername},
-                {$addToSet: {friends: friendusername}}
+                {$addToSet: {friends: friendusername}} //If given the friend will be added to the array or not 
             );
             await userschema.updateOne(
                 {username: friendusername},
