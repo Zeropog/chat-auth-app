@@ -1,6 +1,8 @@
 import express from 'express';
 import addFriendsController from '../contollers/addFriendsController.js';
 import userschema from '../models/users.js';
+import privatechatController from '../contollers/privatechatController.js';
+
 const app= express.Router();
 
 app.get('/', async function(req, res) {
@@ -19,6 +21,8 @@ app.get('/', async function(req, res) {
     }
 });
 app.post('/add-friend', addFriendsController.addFriends);
+
+app.get('/private/:friendname', privatechatController.loadPrivateRoom);
 
 
 export default app;

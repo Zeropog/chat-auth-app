@@ -23,7 +23,7 @@ function restrictedToLogInUserOnly(req, res, next) {
         }
 
         req.user=verifysession;
-        console.log(req.user);
+        //console..log(req.user);
         next();
     });
 

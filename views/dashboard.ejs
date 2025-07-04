@@ -172,13 +172,15 @@
 </header>
 
 
-  <div class="container">
+  <div class="container">              
     <div class="sidebar">
   <h3>Friends</h3>
   <ul id="friend-list">
     <% if (friends && friends.length > 0) { %>
       <% friends.forEach(friend => { %>
-        <li data-friend="<%= friend %>"><%= friend %></li>
+        <li class="friend-item" data-friend="<%= friend %>">
+        <a href="dashboard/private/<%= friend %>" style="color: white; text-decoration: none;"><%= friend %></a>
+        </li>
       <% }); %>
     <% } else { %>
       <li>No friends added yet 😢</li>
@@ -235,6 +237,8 @@
       messagesDiv.appendChild(p);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    
   </script>
 </body>
 </html>
