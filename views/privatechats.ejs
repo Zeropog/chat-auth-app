@@ -94,7 +94,18 @@
   <div class="topbar"><%= friend %></div>
 
   <div class="chat-container">
-    <div id="messages"></div>
+    <div id="messages">
+  <% if (messages && messages.length > 0) { %>
+    <% messages.forEach(function(msg) { %>
+      <div class="message <%= msg.from === username ? 'outgoing' : 'incoming' %>">
+        <%= msg.from === username ? 'You' : msg.from %>: <%= msg.message %>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <p style="text-align:center; color: gray;">Just hit the button 👋</p>
+  <% } %>
+</div>
+
 
     <form id="messageForm">
       <input type="text" id="msgInput" placeholder="Message..." autocomplete="off" />

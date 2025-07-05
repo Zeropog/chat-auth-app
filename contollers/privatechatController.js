@@ -1,4 +1,5 @@
 import userschema from '../models/users.js';
+import messageschema from '../models/messagestore.js';
 
 class privateRoomController{
     static async loadPrivateRoom(req, res){
@@ -13,10 +14,13 @@ class privateRoomController{
             const friendcheck= await userschema.findOne({username:friendname})
             if(!friendcheck) return res.send('user does not exist');
 
+            const roomname=[myusername, friendname].sort().join('-');
+            const messagehistory= await messageschema.find({room: roomname}).sort({timestamp:1});
 
             res.render('privatechats', {
                 username: myusername,
-                friend: friendname
+                friend: friendname,
+                messages: messagehistory
             });
         } catch (e) {
             console.log(e);

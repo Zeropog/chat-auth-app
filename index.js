@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import getauth from './routes/userauth.js';
 import getdashboardroute from './routes/dashboard.js';
 import authbycookie from './middleware/authbycookie.js';
+import sockethandler from './sockets/messagesocketHandler.js';
+
 import cookieParser from 'cookie-parser';
 import {Server} from 'socket.io';
 import http from 'http';
@@ -31,28 +33,7 @@ app.use('/auth', getauth);
 app.use('/dashboard', authbycookie, getdashboardroute);
 
 io.on('connection', function(socket) {
-    //console.log("New user is connected to the server", socket.id);
-
-    socket.on('chat-message', function(data){
-        io.emit('chat-message', data);
-    });
-
-
-    /// Private room connection 
-    socket.on('join-private-room',function({username, friend}){
-        const roomName=[username, friend].sort().join('-');
-        socket.join(roomName);
-        console.log(`${username} joined a private chat with ${friend}`);
-    });
-
-    socket.on('private-message', function({from, to, message}){
-        const roomName = [from, to].sort().join('-');
-        io.to(roomName).emit('private-message', { from, message });
-    });
-
-    socket.on('disconnect', function(){
-        console.log("User is disconnected", socket.id);
-    });
+    sockethandler(io, socket);
 });
 
 mongoose.connect(process.env.MONGODB_URL)
