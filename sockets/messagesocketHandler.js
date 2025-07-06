@@ -1,5 +1,4 @@
-import messageschema from '../models/messagestore.js';
-
+import messageController from '../contollers/messageController.js';
 
 function registerChatHandlers(io, socket) {
   // Global/public message
@@ -19,11 +18,8 @@ function registerChatHandlers(io, socket) {
     const roomName = [from, to].sort().join('-');
     io.to(roomName).emit('private-message', { from, message });
 
-    try {
-        await messageschema.create({to, from, message, room:roomName});
-    } catch (error) {
-        console.log(error);
-    }
+    await messageController.saveMessageToDB({from, to, message, room:roomName});
+    await messageController.saveMessageToCache({from, to, message, room:roomName});
   });
 
   // Handle disconnect

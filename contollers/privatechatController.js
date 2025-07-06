@@ -1,5 +1,6 @@
 import userschema from '../models/users.js';
 import messageschema from '../models/messagestore.js';
+import redisclient from '../config/redisclient.js';
 
 class privateRoomController{
     static async loadPrivateRoom(req, res){
@@ -15,12 +16,25 @@ class privateRoomController{
             if(!friendcheck) return res.send('user does not exist');
 
             const roomname=[myusername, friendname].sort().join('-');
-            const messagehistory= await messageschema.find({room: roomname}).sort({timestamp:1});
+    
+            let messages=[];
+            const redisMessage= await redisclient.lrange(roomname,0,-1);
+            if(redisMessage.length > 0){
+                messages= redisMessage.map(msg => JSON.parse(msg));
+            }
+            else{
+                messages= await messageschema.find({room: roomname}).sort({timestamp:1});
+                //Caching in the redis after taking from the DB
+                 if (messages.length > 0) {
+                    const toCache = messages.map(msg => JSON.stringify(msg));
+                    await redisclient.rPush(roomname, ...toCache);
+                }
+            }
 
             res.render('privatechats', {
                 username: myusername,
                 friend: friendname,
-                messages: messagehistory
+                messages
             });
         } catch (e) {
             console.log(e);
