@@ -27,7 +27,7 @@ class privateRoomController{
                 //Caching in the redis after taking from the DB
                  if (messages.length > 0) {
                     const toCache = messages.map(msg => JSON.stringify(msg));
-                    await redisclient.rPush(roomname, ...toCache);
+                    await redisclient.rpush(roomname, ...toCache);
                 }
             }
 
