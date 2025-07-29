@@ -18,8 +18,8 @@ function registerChatHandlers(io, socket) {
     const roomName = [from, to].sort().join('-');
     io.to(roomName).emit('private-message', { from, message });
 
-    await messageController.saveMessageToDB({from, to, message, room:roomName});
-    await messageController.saveMessageToCache({from, to, message, room:roomName});
+    await messageController.saveMessageToDB({from, to, message, room:roomName});     // Saving it to DB
+    await messageController.saveMessageToCache({from, to, message, room:roomName});  //Saving it to redis
   });
 
   // Handle disconnect

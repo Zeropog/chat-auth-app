@@ -9,10 +9,10 @@ class privateRoomController{
         
         try {
             const usercheck= await userschema.findOne({username: myusername});
-            if(!usercheck) return res.send('Please log in scammer');
+            if(!usercheck) return res.send('Please log in scammer'); //Trying to use the routes from the term
 
-            if(!usercheck.friends.includes(friendname)) return res.send('Not in your friend list: Acess Denied');
-            const friendcheck= await userschema.findOne({username:friendname})
+            if(!usercheck.friends.includes(friendname)) return res.send('Not in your friend list: Acess Denied'); // To check if the person is friend or the one who is requesting a private room chat
+            const friendcheck= await userschema.findOne({username:friendname}) // To check if the friend name exist in the DB
             if(!friendcheck) return res.send('user does not exist');
 
             const roomname=[myusername, friendname].sort().join('-');
@@ -28,6 +28,7 @@ class privateRoomController{
                  if (messages.length > 0) {
                     const toCache = messages.map(msg => JSON.stringify(msg));
                     await redisclient.rpush(roomname, ...toCache);
+                    await redisclient.ltrim(roomname, -100, -1); //LRU Eviction to store last 100 messages
                 }
             }
 
