@@ -39,22 +39,32 @@
       margin-bottom: 1rem;
     }
 
-    .message {
-      padding: 8px 12px;
-      margin-bottom: 8px;
-      border-radius: 8px;
-      max-width: 70%;
-    }
+#chat-messages {
+  display: flex;
+  flex-direction: column;   /* stack messages vertically */
+  gap: 6px;                 /* space between bubbles */
+  padding: 10px;
+}
 
-    .incoming {
-      background-color: #2b2b3d;
-      align-self: flex-start;
-    }
+.message {
+  padding: 8px 12px;
+  border-radius: 18px;
+  max-width: 70%;
+  word-wrap: break-word;
+  font-size: 14px;
+}
 
-    .outgoing {
-      background-color: #4d88ff;
-      align-self: flex-end;
-    }
+.incoming {
+  background-color: #2b2b3d;
+  align-self: flex-start;        /* stick to left */
+  border-bottom-left-radius: 4px;
+}
+
+.outgoing {
+  background-color: #4d88ff;
+  align-self: flex-end;          /* stick to right */
+  border-bottom-right-radius: 4px;
+}
 
     #messageForm {
       display: flex;
@@ -94,16 +104,18 @@
   <div class="topbar"><%= friend %></div>
 
   <div class="chat-container">
-    <div id="messages">
-  <% if (messages && messages.length > 0) { %>
-    <% messages.forEach(function(msg) { %>
-      <div class="message <%= msg.from === username ? 'outgoing' : 'incoming' %>">
-        <%= msg.from === username ? 'You' : msg.from %>: <%= msg.message %>
-      </div>
-    <% }) %>
-  <% } else { %>
-    <p style="text-align:center; color: gray;">Just hit the button 👋</p>
-  <% } %>
+ <div id="messages">
+  <div id="chat-messages">
+    <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(function(msg) { %>
+        <div class="message <%= msg.from === username ? 'outgoing' : 'incoming' %>">
+          <%= msg.message %>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p style="text-align:center; color: gray;">Just hit the button 👋</p>
+    <% } %>
+  </div>
 </div>
 
 
@@ -135,8 +147,10 @@
       div.classList.add('message');
       div.classList.add(data.from === username ? 'outgoing' : 'incoming');
       div.textContent = `${data.from === username ? 'You' : data.from}: ${data.message}`;
-      document.getElementById('messages').appendChild(div);
-      document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+      const chatBox = document.getElementById('chat-messages');
+      chatBox.appendChild(div);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
     });
   </script>
 </body>

@@ -5,7 +5,8 @@ class addFriendsController {
         const {friendusername}= req.body;
         const myusername= req.user?.username;
         if(!myusername) return res.status(404).send('Bad request');
-        if(!friendusername) return res.redirect(`/dashboard?error=Please%20provide%20a%20friend%20name`).send('Please provide us the friend name');
+        if(!friendusername) return res.redirect(`/dashboard?error=Please%20provide%20a%20friend%20name`);
+        else if(friendusername==myusername) res.send('You cannot add yourself as a friend');
         try {
             const friend= await userschema.findOne({username: friendusername});
             if(!friend) return res.status(400).send("user not found");
