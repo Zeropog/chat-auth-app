@@ -46,25 +46,33 @@
   padding: 10px;
 }
 
+/* Common message styles */
 .message {
-  padding: 8px 12px;
-  border-radius: 18px;
-  max-width: 70%;
-  word-wrap: break-word;
-  font-size: 14px;
+  max-width: 60%;           /* Limit bubble width */
+  padding: 10px;
+  margin: 5px;
+  border-radius: 12px;
+  word-wrap: break-word;    /* Wrap text inside */
+  display: inline-block;    /* Prevent stretching full width */
 }
 
-.incoming {
-  background-color: #2b2b3d;
-  align-self: flex-start;        /* stick to left */
-  border-bottom-left-radius: 4px;
-}
-
+/* Outgoing (sent by you) */
 .outgoing {
-  background-color: #4d88ff;
-  align-self: flex-end;          /* stick to right */
-  border-bottom-right-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  margin-left: auto;        /* Push to right */
+  text-align: right;
 }
+
+/* Incoming (received) */
+.incoming {
+  background-color: #eaeaea;
+  color: black;
+  margin-right: auto;       /* Push to left */
+  text-align: left;
+}
+
+
 
     #messageForm {
       display: flex;

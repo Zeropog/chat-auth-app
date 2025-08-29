@@ -7,10 +7,12 @@ import getauth from './routes/userauth.js';
 import getdashboardroute from './routes/dashboard.js';
 import authbycookie from './middleware/authbycookie.js';
 import sockethandler from './sockets/messagesocketHandler.js';
+import redisclient from './config/redisclient.js';
 
 import cookieParser from 'cookie-parser';
 import {Server} from 'socket.io';
 import http from 'http';
+import messageschema from './models/messagestore.js';
 
 dotenv.config();
 
@@ -37,8 +39,13 @@ io.on('connection', function(socket) {
 });
 
 mongoose.connect(process.env.MONGODB_URL)
-.then(function () {
+.then(async function() {
+
     console.log('Database is connected.');
+    //await messageschema.deleteMany({});
+    //await redisclient.flushall();
+    //console.log("The messages are deleted succesfully");
+
     server.listen(port, function() {
     console.log('server connected');
     });
