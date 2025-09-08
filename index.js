@@ -42,9 +42,9 @@ mongoose.connect(process.env.MONGODB_URL)
 .then(async function() {
 
     console.log('Database is connected.');
-    //await messageschema.deleteMany({});
-    //await redisclient.flushall();
-    //console.log("The messages are deleted succesfully");
+    // await messageschema.deleteMany({});
+    // await redisclient.flushall();
+    // console.log("The messages are deleted succesfully");
 
     server.listen(port, function() {
     console.log('server connected');
