@@ -73,7 +73,7 @@ class authController{
             auth.setUserCookie(sessionId, userdetails);
             res.cookie('uid', sessionId);
 
-            const token=jwt.sign({userId: userdetails._id}, process.env.secret_key, {expiresIn: "10m"});
+            const token=jwt.sign({userId: userdetails._id}, process.env.secret_key, {expiresIn: "100m"});
 
             res.cookie("token", token, {
             httpOnly: true,

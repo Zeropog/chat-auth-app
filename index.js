@@ -35,6 +35,7 @@ app.use('/auth', getauth);
 app.use('/dashboard', authbycookie, getdashboardroute);
 
 io.on('connection', function(socket) {
+    //console.log("🔗 New socket connected:", socket.id);
     sockethandler(io, socket);
 });
 

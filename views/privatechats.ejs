@@ -15,27 +15,23 @@
       height: 100vh;
     }
     .call-buttons {
-  float: right;
-  display: flex;
-  gap: 10px;
-}
-
-.call-btn {
-  background-color: #3a3a5a;
-  border: none;
-  padding: 8px 10px;
-  border-radius: 50%;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.call-btn:hover {
-  background-color: #4d88ff;
-}
-
-
+      float: right;
+      display: flex;
+      gap: 10px;
+    }
+    .call-btn {
+      background-color: #3a3a5a;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 50%;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .call-btn:hover {
+      background-color: #4d88ff;
+    }
     .topbar {
       background-color: #29293d;
       padding: 1rem;
@@ -44,7 +40,6 @@
       font-weight: bold;
       border-bottom: 1px solid #3a3a5a;
     }
-
     .chat-container {
       flex: 1;
       display: flex;
@@ -53,54 +48,42 @@
       padding: 1rem;
       overflow: hidden;
     }
-
     #messages {
       flex: 1;
       overflow-y: auto;
       padding-right: 10px;
       margin-bottom: 1rem;
     }
-
-#chat-messages {
-  display: flex;
-  flex-direction: column;   /* stack messages vertically */
-  gap: 6px;                 /* space between bubbles */
-  padding: 10px;
-}
-
-/* Common message styles */
-.message {
-  max-width: 60%;           /* Limit bubble width */
-  padding: 10px;
-  margin: 5px;
-  border-radius: 12px;
-  word-wrap: break-word;    /* Wrap text inside */
-  display: inline-block;    /* Prevent stretching full width */
-}
-
-/* Outgoing (sent by you) */
-.outgoing {
-  background-color: #007bff;
-  color: white;
-  margin-left: auto;        /* Push to right */
-  text-align: right;
-}
-
-/* Incoming (received) */
-.incoming {
-  background-color: #eaeaea;
-  color: black;
-  margin-right: auto;       /* Push to left */
-  text-align: left;
-}
-
-
-
+    #chat-messages {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+    }
+    .message {
+      max-width: 60%;
+      padding: 10px;
+      margin: 5px;
+      border-radius: 12px;
+      word-wrap: break-word;
+      display: inline-block;
+    }
+    .outgoing {
+      background-color: #007bff;
+      color: white;
+      margin-left: auto;
+      text-align: right;
+    }
+    .incoming {
+      background-color: #eaeaea;
+      color: black;
+      margin-right: auto;
+      text-align: left;
+    }
     #messageForm {
       display: flex;
       gap: 10px;
     }
-
     #msgInput {
       flex: 1;
       padding: 10px;
@@ -110,11 +93,9 @@
       background-color: #29293d;
       color: white;
     }
-
     #msgInput:focus {
       outline: 2px solid #4d88ff;
     }
-
     button {
       padding: 10px 16px;
       border: none;
@@ -124,43 +105,83 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #3ee07a;
     }
+
+    /* Toast Notification */
+    .toast {
+     position: fixed;
+     bottom: 20px;
+     right: 20px;
+     background: #29293d;
+     color: white;
+     padding: 12px 18px;
+     border-radius: 8px;
+     font-size: 14px;
+     opacity: 0;
+     pointer-events: none;
+     transition: opacity 0.3s ease-in-out;
+     z-index: 2000;
+  } 
+.toast.show {
+  opacity: 1;
+}
+
   </style>
 </head>
 <body>
+  <div id="toast" class="toast"></div>
   <div class="topbar">
-  <span><%= friend %></span>
-
-  <div class="call-buttons">
-    <button id="voiceCallBtn" class="call-btn">
-      <i class="fas fa-phone"></i>
-    </button>
-    <button id="videoCallBtn" class="call-btn">
-      <i class="fas fa-video"></i>
-    </button>
+    <span><%= friend %></span>
+    <div class="call-buttons">
+      <button id="voiceCallBtn" class="call-btn">
+        <i class="fas fa-phone"></i>
+      </button>
+      <button id="videoCallBtn" class="call-btn">
+        <i class="fas fa-video"></i>
+      </button>
+    </div>
   </div>
-</div>
-
-
 
   <div class="chat-container">
- <div id="messages">
-  <div id="chat-messages">
-    <% if (messages && messages.length > 0) { %>
-      <% messages.forEach(function(msg) { %>
-        <div class="message <%= msg.from === username ? 'outgoing' : 'incoming' %>">
-          <%= msg.message %>
-        </div>
-      <% }) %>
-    <% } else { %>
-      <p style="text-align:center; color: gray;">Just hit the button 👋</p>
-    <% } %>
-  </div>
-</div>
+    <div id="messages">
+      <div id="chat-messages">
+        <% if (messages && messages.length > 0) { %>
+          <% messages.forEach(function(msg) { %>
+            <div class="message <%= msg.from === username ? 'outgoing' : 'incoming' %>">
+              <%= msg.message %>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p style="text-align:center; color: gray;">Just hit the button 👋</p>
+        <% } %>
+      </div>
+    </div>
 
+    <!-- Incoming Call Popup -->
+    <div id="incomingCallPopup" 
+         style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+                background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+      <div style="background:#fff; border-radius:10px; width:320px; padding:20px; 
+                  box-shadow:0 6px 20px rgba(0,0,0,0.3); text-align:center;">
+        <h2 id="callMessage" style="font-size:18px; margin-bottom:20px; color:#333; font-weight:600;">
+          Incoming Call
+        </h2>
+        <div style="display:flex; justify-content:center; gap:15px;">
+          <button id="acceptCallBtn" 
+                  style="flex:1; background:#28a745; color:white; border:none; 
+                         padding:10px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500;">
+            Accept
+          </button>
+          <button id="rejectCallBtn" 
+                  style="flex:1; background:#dc3545; color:white; border:none; 
+                         padding:10px; border-radius:6px; cursor:pointer; font-size:14px; font-weight:500;">
+            Reject
+          </button>
+        </div>
+      </div>
+    </div>
 
     <form id="messageForm">
       <input type="text" id="msgInput" placeholder="Message..." autocomplete="off" />
@@ -176,21 +197,75 @@
 
     socket.emit('join-private-room', { username, friend });
 
+    function showToast(message){
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3000); // disappears after 3 sec
+    }
+
+    // Start Voice Call
     document.getElementById('voiceCallBtn').addEventListener('click', () => {
-    socket.emit('start-call', {
-      from: username,
-      to: friend,
-      type: 'voice'
-    });
+      socket.emit('start-call', { from: username, to: friend, type: 'voice' });
+      showCallingIndicator(friend, 'voice');
     });
 
+    // Start Video Call
     document.getElementById('videoCallBtn').addEventListener('click', () => {
-    socket.emit('start-call', {
-      from: username,
-      to: friend,
-      type: 'video'
+      socket.emit('start-call', { from: username, to: friend, type: 'video' });
+      showCallingIndicator(friend, 'video');
     });
+
+    // Incoming Call (popup only if you are callee)
+    socket.on("incoming-call", ({ from, to, type }) => {
+      if (to === username) {
+        document.getElementById("callMessage").textContent = `${from} is calling you (${type})`;
+        document.getElementById("incomingCallPopup").style.display = "flex";
+      }
     });
+
+    // Accept Call
+    document.getElementById("acceptCallBtn").addEventListener("click", () => {
+      socket.emit("accept-call", { from: username, to: friend });
+      hidePopup();
+    });
+
+    // Reject Call
+    document.getElementById("rejectCallBtn").addEventListener("click", () => {
+      socket.emit("reject-call", { from: username, to: friend });
+      hidePopup();
+    });
+
+    // Call Accepted
+    socket.on("call-accepted", ({ from }) => {
+      clearCallingIndicator();
+      hidePopup();
+      if (from !== username) {
+        showToast(`${from} accepted your call`);
+      }
+    });
+
+    // Call Rejected
+    socket.on("call-rejected", ({ from }) => {
+      clearCallingIndicator();
+      hidePopup();
+      if (from !== username) {
+        showToast(`${from} has rejected your call`);
+      }
+    });
+
+    // Force-clear popup/indicators
+    socket.on("clear-call-popup", () => {
+      hidePopup();
+      clearCallingIndicator();
+    });
+
+    // ----------------
+    // MESSAGE HANDLER
+    // ----------------
     document.getElementById('messageForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const msg = document.getElementById('msgInput').value.trim();
@@ -208,8 +283,33 @@
       const chatBox = document.getElementById('chat-messages');
       chatBox.appendChild(div);
       chatBox.scrollTop = chatBox.scrollHeight;
-
     });
+
+    // ----------------
+    // HELPERS
+    // ----------------
+    function hidePopup() {
+      document.getElementById("incomingCallPopup").style.display = "none";
+    }
+    function showCallingIndicator(to, type) {
+      clearCallingIndicator();
+      const div = document.createElement("div");
+      div.id = "callingIndicator";
+      div.style.position = "fixed";
+      div.style.bottom = "20px";
+      div.style.right = "20px";
+      div.style.background = "#29293d";
+      div.style.color = "white";
+      div.style.padding = "10px 16px";
+      div.style.borderRadius = "8px";
+      div.style.boxShadow = "0px 4px 10px rgba(0,0,0,0.3)";
+      div.textContent = `Calling ${to} (${type})...`;
+      document.body.appendChild(div);
+    }
+    function clearCallingIndicator() {
+      const div = document.getElementById("callingIndicator");
+      if (div) div.remove();
+    }
   </script>
 </body>
 </html>
